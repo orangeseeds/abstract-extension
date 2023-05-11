@@ -6,6 +6,7 @@
     import ConfigIcon from "./assets/ConfigIcon.svelte";
     import { fade } from "svelte/transition";
     import { expoIn } from "svelte/easing";
+    import Reload from "./assets/Reload.svelte";
 
     const dispatch = createEventDispatcher();
     const collapseContainer = () => {
@@ -18,11 +19,17 @@
     const openConfig = () => {
         configVisible = !configVisible;
     };
-    const openInNewTab = () => {};
+    const reloadContentSection = () => {
+        dispatch("reloadContentSection");
+    };
 
-    const dispatchClearEvent = ()=>{
-        dispatch("clearContentSection")
-    }
+    const dispatchClearEvent = () => {
+        dispatch("clearContentSection");
+    };
+
+    const dispatchLogoutEvent = () => {
+        dispatch("logout");
+    };
 </script>
 
 <div class="m-1 p-0.5 border-b border-gray-300 shadow-sm">
@@ -47,9 +54,9 @@
         </button>
         <button
             class="flex w-1/4 justify-center py-2 m-1 hover:bg-gray-300 rounded-md"
-            on:click={openInNewTab}
+            on:click={reloadContentSection}
         >
-            <OpenWindow />
+            <Reload />
         </button>
     </div>
 </div>
@@ -109,22 +116,35 @@
 
         <button
             class="text-gray-500 font-semibold text-sm"
+            on:click={dispatchLogoutEvent}>Logout</button
+        >
+        <button
+            class="text-gray-500 font-semibold text-sm"
             on:click={dispatchClearEvent}>Clear</button
         >
 
-<!-- The button to open modal -->
-<label for="my-modal" class="text-gray-500 font-semibold text-sm cursor-pointer" >open modal</label>
+        <!-- The button to open modal -->
+        <label
+            for="my-modal"
+            class="text-gray-500 font-semibold text-sm cursor-pointer"
+            >open modal</label
+        >
 
-<!-- Put this part before </body> tag -->
-<input type="checkbox" id="my-modal" class="modal-toggle" />
-<div class="modal">
-  <div class="modal-box">
-    <h3 class="font-bold text-lg">Congratulations random Internet user!</h3>
-    <p class="py-4">You've been selected for a chance to get one year of subscription to use Wikipedia for free!</p>
-    <div class="modal-action">
-      <label for="my-modal" class="btn">Yay!</label>
-    </div>
-  </div>
-</div>
+        <!-- Put this part before </body> tag -->
+        <input type="checkbox" id="my-modal" class="modal-toggle" />
+        <div class="modal">
+            <div class="modal-box">
+                <h3 class="font-bold text-lg">
+                    Congratulations random Internet user!
+                </h3>
+                <p class="py-4">
+                    You've been selected for a chance to get one year of
+                    subscription to use Wikipedia for free!
+                </p>
+                <div class="modal-action">
+                    <label for="my-modal" class="btn">Yay!</label>
+                </div>
+            </div>
+        </div>
     </div>
 {/if}

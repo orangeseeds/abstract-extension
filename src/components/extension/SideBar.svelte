@@ -1,6 +1,6 @@
 <script lang="ts">
-    import "../app.css"
-    import { onMount } from "svelte";
+    import "../app.css";
+    import { afterUpdate, createEventDispatcher, onMount } from "svelte";
     import Nav from "./Nav.svelte";
     import ArrowLeft from "./assets/ArrowLeft.svelte";
     import { tweened } from "svelte/motion";
@@ -9,9 +9,14 @@
     import Content from "./Content.svelte";
     import Input from "./Input.svelte";
     import { fade } from "svelte/transition";
-    import { localStore } from "./store";
-    import { getDataWithDelay } from "./api";
+    import { jwtToken, localStore } from "./store";
+    import { getDataWithDelay, getData } from "./lib/api";
+    import { getSummaryList, summarizeText } from "./lib/summarize";
+    import Login from "./Login.svelte";
+    import Signup from "./Signup.svelte";
 
+    let loginPrompt = true;
+    let showSignup = false;
     let sidebarContainer: HTMLElement;
     let containerCollapsed = true;
     let contentPresent = false;
@@ -54,43 +59,75 @@
         }
     };
 
+    const loadList = () => {
+        try {
+            let response = getSummaryList(window.location.host);
+
+            response.then((response) => {
+                console.log(response);
+                response.summaries.forEach((item) => {
+                    contents.push({
+                        summary: item,
+                    });
+                });
+                contents = contents;
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     let contentSection: HTMLDivElement;
     onMount(() => {
         sidebarContainer = document.querySelector("div#extensionContainer");
         contentSection = document.querySelector("#contentSection");
 
-        const unsubscribe = localStore.subscribe((data) => {
-            // @ts-ignore
-            data.forEach((item) => {
-                contents.push(item.response);
-                contents = contents;
-            });
-        });
+        loadList();
+        // const unsubscribe = localStore.subscribe((data) => {
+        //     // @ts-ignore
+        //     data.forEach((item) => {
+        //         contents.push(item.response);
+        //         contents = contents;
+        //     });
+        // });
 
-        unsubscribe();
+        // unsubscribe();
     });
 
     let contents = [];
     const handleInputSend = (event) => {
         let inputValue = event.detail.value;
 
-        let response = getDataWithDelay(inputValue, 2000);
-        contents.push(response);
-        contents = contents;
+        try {
+            let response = summarizeText(inputValue, window.location.host);
 
-        response.then((response) => {
-            localStore.update((data) => {
-                // @ts-ignore
-                data.push({
-                    time: Date(),
-                    request: response,
-                    response: response,
-                });
-                return data;
-            });
-        });
-        contentSection.scrollTop = contentSection.scrollHeight;
+            contents.push(response);
+            contents = contents;
+
+            // response
+            //     .then((response) => {
+            //         console.log(response);
+            //         // localStore.update((data) => {
+            //         //     // @ts-ignore
+            //         //     data.push({
+            //         //         time: Date(),
+            //         //         request: response,
+            //         //         response: response,
+            //         //     });
+            //         //     return data;
+            //         // });
+            //     })
+        } catch (error) {
+            console.log(error);
+            loginPrompt = true;
+        }
     };
+
+    afterUpdate(() => {
+        if (contentSection && !showNotification) {
+            contentSection.scrollTop = contentSection.scrollHeight;
+        }
+    });
 
     // Access the stored data using the store
 
@@ -100,6 +137,13 @@
         setTimeout(() => {
             showNotification = false;
         }, 3000);
+    };
+
+    const handleReloadEvent = () => {
+        localStore.clear();
+        contents = [];
+        loadList()
+
     };
 
     const handleClearEvent = () => {
@@ -114,10 +158,20 @@
             contentPresent = false;
         }
     }
+
+    jwtToken.subscribe((data) => {
+        // @ts-ignore
+        if (data != "") {
+            loginPrompt = false;
+        } else {
+            loginPrompt = true;
+        }
+    });
 </script>
 
-<div class="h-screen top-0 right-0 fixed p-2 antialiased flex flex-col"
-style="z-index: 10000000;"
+<div
+    class="h-screen top-0 right-0 fixed p-2 antialiased flex flex-col"
+    style="z-index: 10000000;"
 >
     <div
         id="extensionContainer"
@@ -127,48 +181,85 @@ style="z-index: 10000000;"
         <Nav
             on:squishContainer={toggleContainer}
             on:clearContentSection={handleClearEvent}
+            on:reloadContentSection={handleReloadEvent}
+            on:logout={() => {
+                loginPrompt = true;
+                jwtToken.set("");
+                contents = []
+            }}
         />
-        <div
-            id="contentSection"
-            class="px-5 text-gray-700 h-full py-2 overflow-y-auto"
-            class:invisible={containerCollapsed}
-        >
-            {#if showNotification}
-                <div class="toast toast-top toast-end">
-                    <div class="alert bg-gray-50 text-gray-500 border text-sm">
-                        <div>
-                            <span>Copied Text</span>
-                        </div>
-                    </div>
-                </div>
+        {#if loginPrompt}
+            {#if showSignup}
+                <Signup
+                    on:showLogin={() => {
+                        showSignup = false;
+                    }}
+                    on:signupComplete={() => {
+                        loginPrompt = false;
+                        loadList();
+                    }}
+                />
+            {:else}
+                <Login
+                    on:showSignUp={() => {
+                        showSignup = true;
+                    }}
+                    on:loginComplete={() => {
+                        loginPrompt = false;
+                        loadList();
+                    }}
+                />
             {/if}
-            <h3 class=" text-xl font-extrabold text-gray-600 mb-6">
-                Summary
-            </h3>
-            {#if contentPresent}
-                {#each contents as promise}
-                    {#await promise}
-                        <div class="my-5 animate-pulse animate-bounce">
-                            <div
-                                class="mx-2 text-center text-gray-400 font-bold text-sm"
-                            >
-                                Loading...
+        {:else}
+            <div
+                id="contentSection"
+                class="px-5 text-gray-700 h-full py-2 overflow-y-auto"
+                class:invisible={containerCollapsed}
+            >
+                {#if showNotification}
+                    <div class="toast toast-top toast-end">
+                        <div
+                            class="alert bg-gray-50 text-gray-500 border text-sm"
+                        >
+                            <div>
+                                <span>Copied Text</span>
                             </div>
                         </div>
-                    {:then content}
-                        <Content
-                            text={content}
-                            on:copiedToClipboard={handleNotification}
-                        />
-                    {/await}
+                    </div>
+                {/if}
+                <h3 class=" text-xl font-extrabold text-gray-600 mb-6">
+                    Summary
+                </h3>
+                {#if contentPresent}
+                    {#each contents as promise}
+                        {#await promise}
+                            <div class="my-5 animate-pulse animate-bounce">
+                                <div
+                                    class="mx-2 text-center text-gray-400 font-bold text-sm"
+                                >
+                                    Loading...
+                                </div>
+                            </div>
+                        {:then content}
+                            <Content
+                                text={content.summary.response}
+                                on:copiedToClipboard={handleNotification}
+                            />
+                        {:catch error}
+                            <div class="text-gray-200 font-semibold text-sm">
+                                Oops, some error occured... {error}
+                            </div>
+                        {/await}
 
-                    <div class="divider my-0 border-0" />
-                {/each}
-            {:else}
-                <NoContent />
-            {/if}
-        </div>
+                        <div class="divider my-0 border-0" />
+                    {/each}
+                {:else}
+                    <NoContent />
+                {/if}
+            </div>
 
+            <Input on:sendInput={handleInputSend} />
+        {/if}
         {#if containerCollapsed}
             <button
                 in:fade={{
@@ -180,13 +271,13 @@ style="z-index: 10000000;"
                 <ArrowLeft />
             </button>
         {/if}
-        <Input on:sendInput={handleInputSend} />
     </div>
 </div>
 
 <style>
-:global(div#extensionContainer) {
-    font-size: 16px; /* 16px */
-    line-height: 24px; /* 24px */
-}
+    /**
+    :global(div#extensionContainer) {
+        font-size: 16px;         
+line-height: 24px;    }
+**/
 </style>

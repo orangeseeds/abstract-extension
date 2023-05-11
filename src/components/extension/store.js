@@ -51,3 +51,4 @@ const createLocalStorageStore = (key) => {
 }
 
 export const localStore = createLocalStorageStore("extensionData")
+export const jwtToken = createLocalStorageStore("jwtToken")

@@ -19,7 +19,8 @@ export const getDataWithDelayAPI = async (
                     resolve(data);
                 })
                 .catch((error) => {
-                    resolve(null);
+                    alert(error)
+                    reject(null);
                     throw Error(error);
                 });
         }, delay);
@@ -27,11 +28,11 @@ export const getDataWithDelayAPI = async (
 };
 
 export const getData = async (/** @type {string} */ id) => {
-    let resource = `https://pokeapi.co/api/v2/ability/${id}`;
+    let resource = `http://localhost:8000/api/status`;
     let response = await fetch(resource);
     if (response.ok) {
         return await response.json();
     } else {
-        throw new Error(`Request failed to ${resource}`);
+        throw new Error("Not allowed!!");
     }
 };
