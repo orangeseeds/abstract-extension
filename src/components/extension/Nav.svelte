@@ -38,7 +38,8 @@
             class="flex w-1/4 justify-center py-2 m-1 hover:bg-gray-300 rounded-md"
             on:click={collapseContainer}
         >
-            <ArrowRight />
+            <ArrowRight/>
+
         </button>
         <button
             class="flex w-1/4 justify-center py-2 m-1 hover:bg-gray-300 rounded-md"
@@ -74,77 +75,78 @@
         class="bg-gray-50 rounded-md p-2 py-6 border shadow-md absolute w-full mt-14 mx-1 space-y-4 z-50"
         style="width: 98%;"
     >
-        <div>
-            <div class="tooltip tooltip-right" data-tip="depth information">
-                <label for="depth" class="text-gray-500 text-sm font-semibold"
-                    >depth</label
-                >
-            </div>
-            <input
-                name="depth"
-                type="range"
-                min="0"
-                max="100"
-                value="25"
-                class="range range-xs"
-                step="25"
-            />
-            <div
-                class="w-full flex justify-between text-xs px-2 font-semibold text-gray-400"
-            >
-                <span>|</span>
-                <span>|</span>
-                <span>|</span>
-                <span>|</span>
-                <span>|</span>
-            </div>
-        </div>
-        <div>
-            <div class="tooltip tooltip-right" data-tip="listings information">
-                <label for="depth" class="text-gray-500 text-sm font-semibold"
-                    >listings</label
-                >
-            </div>
-            <input
-                type="range"
-                min="0"
-                max="100"
-                value="40"
-                class="range range-xs"
-            />
-        </div>
+        <!-- <div> -->
+        <!--     <div class="tooltip tooltip-right" data-tip="depth information"> -->
+        <!--         <label for="depth" class="text-gray-500 text-sm font-semibold" -->
+        <!--             >depth</label -->
+        <!--         > -->
+        <!--     </div> -->
+        <!--     <input -->
+        <!--         name="depth" -->
+        <!--         type="range" -->
+        <!--         min="0" -->
+        <!--         max="100" -->
+        <!--         value="25" -->
+        <!--         class="range range-xs" -->
+        <!--         step="25" -->
+        <!--     /> -->
+        <!--     <div -->
+        <!--         class="w-full flex justify-between text-xs px-2 font-semibold text-gray-400" -->
+        <!--     > -->
+        <!--         <span>|</span> -->
+        <!--         <span>|</span> -->
+        <!--         <span>|</span> -->
+        <!--         <span>|</span> -->
+        <!--         <span>|</span> -->
+        <!--     </div> -->
+        <!-- </div> -->
+        <!-- <div> -->
+        <!--     <div class="tooltip tooltip-right" data-tip="listings information"> -->
+        <!--         <label for="depth" class="text-gray-500 text-sm font-semibold" -->
+        <!--             >listings</label -->
+        <!--         > -->
+        <!--     </div> -->
+        <!--     <input -->
+        <!--         type="range" -->
+        <!--         min="0" -->
+        <!--         max="100" -->
+        <!--         value="40" -->
+        <!--         class="range range-xs" -->
+        <!--     /> -->
+        <!-- </div> -->
 
         <button
             class="text-gray-500 font-semibold text-sm"
             on:click={dispatchLogoutEvent}>Logout</button
         >
+            <br>
         <button
             class="text-gray-500 font-semibold text-sm"
-            on:click={dispatchClearEvent}>Clear</button
+            on:click={dispatchClearEvent}>Clear Contents</button
         >
 
         <!-- The button to open modal -->
-        <label
-            for="my-modal"
-            class="text-gray-500 font-semibold text-sm cursor-pointer"
-            >open modal</label
-        >
+        <!-- <label -->
+        <!--     for="my-modal" -->
+        <!--     class="text-gray-500 font-semibold text-sm cursor-pointer" -->
+        <!--     >open modal</label -->
+        <!-- > -->
 
         <!-- Put this part before </body> tag -->
-        <input type="checkbox" id="my-modal" class="modal-toggle" />
-        <div class="modal">
-            <div class="modal-box">
-                <h3 class="font-bold text-lg">
-                    Congratulations random Internet user!
-                </h3>
-                <p class="py-4">
-                    You've been selected for a chance to get one year of
-                    subscription to use Wikipedia for free!
-                </p>
-                <div class="modal-action">
-                    <label for="my-modal" class="btn">Yay!</label>
-                </div>
-            </div>
-        </div>
+        <!-- <input type="checkbox" id="my-modal" class="modal-toggle" /> -->
+        <!-- <div class="modal"> -->
+        <!--     <div class="modal-box"> -->
+        <!--         <h3 class="font-bold text-lg"> -->
+        <!--             Congratulations random Internet user! -->
+        <!--         </h3> -->
+        <!--         <p class="py-4"> -->
+        <!--             You've been selected for a chance to get one year of -->
+        <!--             subscription to use Wikipedia for free! -->
+        <!--         </p> -->
+        <!--         <div class="modal-action"> -->
+        <!--             <label for="my-modal" class="btn">Yay!</label> -->
+        <!--         </div> -->
+        <!--     </div> -->
+        <!-- </div> -->
     </div>
 {/if}

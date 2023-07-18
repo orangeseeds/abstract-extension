@@ -53,7 +53,7 @@
                         id="email"
                         name="email"
                         type="email"
-                        class="w-full rounded-md border border-gray-400 py-1 text-gray-700 focus:shadow-sm focus:outline focus:outline-1 outline-emerald-500 focus:shadow-sm focus:bg-gray-50 text-gray-700 font-medium"
+                        class="w-full rounded-md border border-gray-400 py-2 px-1 text-gray-700 focus:shadow-sm focus:outline focus:outline-1 outline-emerald-500 focus:shadow-sm focus:bg-gray-50 text-gray-700 font-medium bg-white"
                         bind:value={email}
                     />
                 </div>
@@ -71,12 +71,12 @@
                         id="password"
                         name="password"
                         type="password"
-                        class="w-full rounded-md border border-gray-400 py-1 text-gray-700 focus:shadow-sm focus:outline focus:outline-1 outline-emerald-500 focus:shadow-sm focus:bg-gray-50 text-gray-700 font-medium"
+                        class="w-full rounded-md border border-gray-400 py-2 px-1 text-gray-700 focus:shadow-sm focus:outline focus:outline-1 outline-emerald-500 focus:shadow-sm focus:bg-gray-50 text-gray-700 font-medium, bg-white"
                         bind:value={password}
                     />
                     <button
                         type="button"
-                        class="absolute my-3.5 top-0 right-3"
+                        class="absolute top-0 right-3 my-2"
                         on:click={handleClick}
                     >
                         <Eye />

@@ -23,13 +23,14 @@ export const login = async (email, password) => {
 
 
 export const signup = async (username, email, password) => {
+    console.log(username, email, password)
     let response = await fetch(SIGNUP, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            username: username,
+            user_name: username,
             email: email,
             password: password,
         })

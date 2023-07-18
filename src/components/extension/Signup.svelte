@@ -22,11 +22,15 @@
     };
 
     const handleSubmit = () => {
-        dispatch("signupComplete");
-        signup(email, password).then((response) => {
-            console.log(response);
-            jwtToken.set(response.jwt.access_token);
-        });
+        signup(username, email, password)
+            .then((response) => {
+                console.log(response);
+                jwtToken.set(response.jwt.access_token);
+                dispatch("signupComplete");
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
 </script>
 
@@ -50,7 +54,7 @@
                         id="email"
                         name="email"
                         type="email"
-                        class="w-full rounded-md border border-gray-400 py-1 text-gray-700 focus:shadow-sm focus:outline focus:outline-1 outline-emerald-500 focus:shadow-sm focus:bg-gray-50 text-gray-700 font-medium"
+                        class="input-box w-full px-1 rounded-md border border-gray-400 py-2 text-gray-700 focus:shadow-sm focus:outline focus:outline-1 outline-emerald-500 focus:shadow-sm focus:bg-gray-50 text-gray-700 font-medium bg-white"
                         bind:value={email}
                     />
                 </div>
@@ -68,7 +72,7 @@
                         id="username"
                         name="username"
                         type="text"
-                        class="w-full rounded-md border border-gray-400 py-1 text-gray-700 focus:shadow-sm focus:outline focus:outline-1 outline-emerald-500 focus:shadow-sm focus:bg-gray-50 text-gray-700 font-medium"
+                        class="input-box w-full px-1 !rounded-md border border-gray-400 py-2 text-gray-700 focus:shadow-sm focus:outline focus:outline-1 outline-emerald-500 focus:shadow-sm focus:bg-gray-50 text-gray-700 font-medium bg-white"
                         bind:value={username}
                     />
                 </div>
@@ -84,12 +88,12 @@
                             id="password"
                             name="password"
                             type="password"
-                            class="w-full rounded-md border border-gray-400 py-1 text-gray-700 focus:shadow-sm focus:outline focus:outline-1 outline-emerald-500 focus:shadow-sm focus:bg-gray-50 text-gray-700 font-medium"
+                            class="input-box w-full px-1 rounded-md border border-gray-400 py-2 text-gray-700 focus:shadow-sm focus:outline focus:outline-1 outline-emerald-500 focus:shadow-sm focus:bg-gray-50 text-gray-700 font-medium bg-white"
                             bind:value={password}
                         />
                         <button
                             type="button"
-                            class="absolute my-3.5 top-0 right-3"
+                            class="absolute my-2 top-0 right-3"
                             on:click={handleClick}
                         >
                             <Eye />
@@ -118,3 +122,11 @@
         </p>
     </div>
 </div>
+
+<style>
+    /*
+    .input-box {
+        border: solid 1px !important;
+    }
+*/
+</style>

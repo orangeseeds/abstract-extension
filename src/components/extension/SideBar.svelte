@@ -1,17 +1,20 @@
 <script lang="ts">
     import "../app.css";
-    import { afterUpdate, createEventDispatcher, onMount } from "svelte";
     import Nav from "./Nav.svelte";
     import ArrowLeft from "./assets/ArrowLeft.svelte";
-    import { tweened } from "svelte/motion";
-    import { cubicInOut } from "svelte/easing";
     import NoContent from "./NoContent.svelte";
     import Content from "./Content.svelte";
     import Input from "./Input.svelte";
+    import { afterUpdate, onMount } from "svelte";
+    import { tweened } from "svelte/motion";
+    import { cubicInOut } from "svelte/easing";
     import { fade } from "svelte/transition";
     import { jwtToken, localStore } from "./store";
-    import { getDataWithDelay, getData } from "./lib/api";
-    import { getSummaryList, summarizeText } from "./lib/summarize";
+    import {
+        getSummaryList,
+        summarizeText,
+        clearSummaryList,
+    } from "./lib/summarize";
     import Login from "./Login.svelte";
     import Signup from "./Signup.svelte";
 
@@ -59,6 +62,16 @@
         }
     };
 
+    const clearList = () => {
+        try {
+            let response = clearSummaryList(window.location.host);
+            response.then((response) => {
+                console.log(response);
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
     const loadList = () => {
         try {
             let response = getSummaryList(window.location.host);
@@ -142,13 +155,13 @@
     const handleReloadEvent = () => {
         localStore.clear();
         contents = [];
-        loadList()
-
+        loadList();
     };
 
     const handleClearEvent = () => {
         localStore.clear();
         contents = [];
+        clearList();
     };
 
     $: {
@@ -185,7 +198,7 @@
             on:logout={() => {
                 loginPrompt = true;
                 jwtToken.set("");
-                contents = []
+                contents = [];
             }}
         />
         {#if loginPrompt}
@@ -213,11 +226,16 @@
         {:else}
             <div
                 id="contentSection"
-                class="px-5 text-gray-700 h-full py-2 overflow-y-auto"
+                class="text-gray-700 h-full py-2 px-5 overflow-y-auto"
                 class:invisible={containerCollapsed}
+                style=" padding-left: 1.25rem !important; padding-right: 1.25rem !important; "
             >
+                <!--Notification-->
                 {#if showNotification}
-                    <div class="toast toast-top toast-end">
+                    <div
+                        class="toast toast-top toast-end"
+                        style="z-index: 10000000000000;"
+                    >
                         <div
                             class="alert bg-gray-50 text-gray-500 border text-sm"
                         >
@@ -246,7 +264,7 @@
                                 on:copiedToClipboard={handleNotification}
                             />
                         {:catch error}
-                            <div class="text-gray-200 font-semibold text-sm">
+                            <div class="text-gray-300 font-semibold text-sm">
                                 Oops, some error occured... {error}
                             </div>
                         {/await}

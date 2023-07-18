@@ -25,6 +25,23 @@ export const summarizeText = async (payload, domain) => {
     }
 };
 
+export const clearSummaryList = async (domain) => {
+    // const url = `${SUMMARY}?domain=${domain}`
+    const url = `http://localhost:8000/api/summary/?domain=${domain}`
+    let token = get(jwtToken)
+    let response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
+        },
+    });
+    if (response.ok) {
+        return await response.json();
+    } else {
+        throw new Error(`Failed to login`);
+    }
+};
 export const getSummaryList = async (domain) => {
     // const url = `${SUMMARY}?domain=${domain}`
     const url = `http://localhost:8000/api/summary/?domain=${domain}`
