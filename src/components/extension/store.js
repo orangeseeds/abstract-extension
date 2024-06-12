@@ -1,23 +1,6 @@
 import { writable } from "svelte/store"
 
-// function createLocalStorageStor(key, initialValue) {
-//     const storedValue = localStorage.getItem(key);
-//     const initialData = storedValue ? JSON.parse(storedValue) : initialValue;
-//
-//     const { subscribe, set, update } = writable(initialData);
-//
-//     subscribe((currentValue) => {
-//         localStorage.setItem(key, JSON.stringify(currentValue));
-//     });
-//
-//     return {
-//         subscribe,
-//         set,
-//         update
-//     };
-// }
-
-const storeToLocalStorage = (key, value) => {
+const storeToLocalStorage = (key, value ) => {
     localStorage.setItem(key, JSON.stringify(value))
 }
 

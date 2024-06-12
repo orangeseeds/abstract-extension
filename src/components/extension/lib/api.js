@@ -8,11 +8,12 @@ export const getDataWithDelay = async (
         }, delay);
     });
 };
+
 export const getDataWithDelayAPI = async (
     /** @type {string} */ id,
     delay = 0
 ) => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         setTimeout(() => {
             getData(id)
                 .then((data) => {

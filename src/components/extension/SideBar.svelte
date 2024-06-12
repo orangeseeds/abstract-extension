@@ -96,15 +96,6 @@
         contentSection = document.querySelector("#contentSection");
 
         loadList();
-        // const unsubscribe = localStore.subscribe((data) => {
-        //     // @ts-ignore
-        //     data.forEach((item) => {
-        //         contents.push(item.response);
-        //         contents = contents;
-        //     });
-        // });
-
-        // unsubscribe();
     });
 
     let contents = [];
@@ -116,20 +107,6 @@
 
             contents.push(response);
             contents = contents;
-
-            // response
-            //     .then((response) => {
-            //         console.log(response);
-            //         // localStore.update((data) => {
-            //         //     // @ts-ignore
-            //         //     data.push({
-            //         //         time: Date(),
-            //         //         request: response,
-            //         //         response: response,
-            //         //     });
-            //         //     return data;
-            //         // });
-            //     })
         } catch (error) {
             console.log(error);
             loginPrompt = true;
@@ -157,7 +134,6 @@
         contents = [];
         loadList();
     };
-
     const handleClearEvent = () => {
         localStore.clear();
         contents = [];
